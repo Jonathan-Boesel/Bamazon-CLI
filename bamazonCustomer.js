@@ -22,7 +22,6 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
 	if (err) throw err;
-	console.log("connected as id " + connection.threadId);
 
 
 });
@@ -76,11 +75,11 @@ function customer() {
 		connection.query("SELECT stock_quantity FROM products WHERE item_id = '" + userInput.itemID + "'", function(err, res) {
 			if (err) throw err;
 			tmpRes = res[0].stock_quantity;
-			console.log(res[0].stock_quantity);
+			// console.log(res[0].stock_quantity);
 
 			// }).then(function(tmpRes) {
 			if (tmpRes > userInput.quantity) {
-				console.log("Theres enough")
+				// console.log("Theres enough")
 				updateListing(tmpRes, userInput)
 
 			}
@@ -93,7 +92,7 @@ function customer() {
 }
 
 function updateListing(tmpRes, userInput) {
-	console.log(tmpRes - userInput.quantity)
+	// console.log(tmpRes - userInput.quantity)
 	var query = connection.query(
 		"UPDATE products SET ? WHERE ?", [{
 				stock_quantity: tmpRes - userInput.quantity

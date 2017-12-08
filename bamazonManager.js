@@ -22,7 +22,6 @@ var connection = mysql.createConnection({
 
 connection.connect(function(err) {
 	if (err) throw err;
-	console.log("connected as id " + connection.threadId);
 
 });
 
@@ -117,7 +116,7 @@ function reset() {
 	inquirer.prompt([{
 		type: "list",
 		name: "answer",
-		message: "Would you like to buy something else?",
+		message: "Would you like to do something else?",
 		choices: ["YES", "NO"]
 	}]).then(function(userInput) {
 		switch (userInput.answer) {
@@ -171,5 +170,3 @@ function createProduct(userInput) {
 module.exports = {
 	start: start
 }
-
-start()

@@ -31,3 +31,4 @@ start();
 // Auto_increment does not reset when a row is deleted i.e. if row ID 10 is deleted and the next added row will be ID 11
 //		Is this normal/anticipated by other users looking at the table?
 // Inquirer list sometimes relogs the question when arrow keys are hit
+// Connection.end() doesnt always ctrl C out of the node
