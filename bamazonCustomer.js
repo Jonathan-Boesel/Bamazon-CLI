@@ -6,6 +6,8 @@ require('console.table')
 
 // npm-init
 
+var query = ""
+
 var connection = mysql.createConnection({
 	host: "localhost",
 	port: 3306,
@@ -21,11 +23,11 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
 	if (err) throw err;
 	console.log("connected as id " + connection.threadId);
-	afterConnection()
+
 
 });
 
-function afterConnection() {
+function start() {
 	connection.query("SELECT item_id, product_name, price FROM products", function(err, res) {
 		if (err) throw err;
 		console.table(res);
@@ -35,8 +37,28 @@ function afterConnection() {
 	});
 }
 
-var query = ""
-
+function reset() {
+	inquirer.prompt([{
+		type: "list",
+		name: "answer",
+		message: "Would you like to buy something else?",
+		choices: ["YES", "NO"]
+	}]).then(function(userInput) {
+		switch (userInput.answer) {
+			case "NO":
+				console.log("Thanks for visiting BAMAZON, have a great day!!");
+				connection.end();
+				break;
+			case "YES":
+				connection.query("SELECT item_id, product_name, price FROM products", function(err, res) {
+					if (err) throw err;
+					console.table(res);
+					customer()
+				});
+				break;
+		}
+	});
+}
 
 function customer() {
 	inquirer.prompt([{
@@ -86,10 +108,14 @@ function updateListing(tmpRes, userInput) {
 				item_id: userInput.itemID
 			}], function(err, res) {
 				if (err) throw err;
-				console.log("Thank you for ordering! Your price is: $" + (res[0].price * userInput.quantity))
+				console.log("Thank you for ordering! Your price is: $" + (res[0].price * userInput.quantity));
+				reset()
 			})
 			console.log(res.affectedRows + " product updated!\n");
-			customer()
 		}
 	);
+}
+
+module.exports = {
+	start: start
 }

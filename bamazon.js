@@ -2,32 +2,32 @@ var inquirer = require("inquirer");
 
 var mysql = require("mysql");
 
-var customer = require("bamazonCustomer.js")
+var customer = require("./bamazonCustomer.js")
+var manager = require("./bamazonManager.js")
 
-var connection = mysql.createConnection({
-	host: "localhost",
-	port: 3306,
+function start() {
+	inquirer.prompt([{
+		type: "list",
+		name: "answer",
+		message: "Who are you?",
+		choices: ["Customer", "Manager", "Supervisor"]
+	}]).then(function(userInput) {
+		if (userInput.answer === "Customer") {
+			customer.start();
+		}
+		if (userInput.answer === "Manager") {
+			console.log("G'day Manager!");
+			manager.start();
 
-	// Your username
-	user: "root",
-
-	// Your password
-	password: "",
-	database: "bamazonDB"
-});
-
-connection.connect(function(err) {
-	if (err) throw err;
-	console.log("connected as id " + connection.threadId);
-
-});
-
-function afterConnection() {
-	connection.query("SELECT item_id, product_name, price FROM products", function(err, res) {
-		if (err) throw err;
-		console.table(res);
-		start()
-
-		// connection.end();
+		}
 	});
 }
+
+start();
+
+
+// Issues and questions:
+// How to display trailing 0's when reading from mySQL i.e. $20.50 comes back as $20.5
+// Auto_increment does not reset when a row is deleted i.e. if row ID 10 is deleted and the next added row will be ID 11
+//		Is this normal/anticipated by other users looking at the table?
+// Inquirer list sometimes relogs the question when arrow keys are hit
