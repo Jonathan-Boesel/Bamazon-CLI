@@ -75,6 +75,13 @@ function start() {
 				});
 				break;
 			case "FOUR":
+				var depoArr = [];
+				connection.query("SELECT DISTINCT department_name FROM products", function(err, res) {
+					if (err) throw err;
+					for (var i = 0; i < res.length; i++) {
+						depoArr.push(res[i].department_name)
+					}
+				})
 				inquirer.prompt([{
 						type: "input",
 						name: "name",
@@ -84,7 +91,7 @@ function start() {
 						type: "list",
 						name: "depoName",
 						message: "Department name:",
-						choices: ["Appliances", "Home Decor", "Electronics"]
+						choices: depoArr
 					},
 					{
 						type: "input",
@@ -164,3 +171,5 @@ function createProduct(userInput) {
 module.exports = {
 	start: start
 }
+
+start()
